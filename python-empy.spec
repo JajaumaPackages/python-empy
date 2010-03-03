@@ -3,7 +3,7 @@
 
 Name:           python-empy
 Version:        3.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        A powerful and robust template system for Python
 
 Group:          Development/Languages
@@ -13,7 +13,7 @@ Source:         http://www.alcyone.com/software/%{tarname}/%{tarname}-latest.tar
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
-BuildRequires:  python-setuptools
+BuildRequires:  python-setuptools, python-devel
 
 %description
 EmPy is a system for embedding Python expressions and statements in template
@@ -45,6 +45,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Mar 03 2010 Filipe Rosset <rosset.filipe@gmail.com> - 3.3-5
+- Fix compilation error
+
 * Mon Mar 01 2010 Filipe Rosset <rosset.filipe@gmail.com> - 3.3-4
 - Fix license
 
