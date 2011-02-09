@@ -3,7 +3,7 @@
 
 Name:           python-empy
 Version:        3.3
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        A powerful and robust template system for Python
 
 Group:          Development/Languages
@@ -45,6 +45,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.3-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 3.3-6
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
