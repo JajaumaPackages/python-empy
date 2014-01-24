@@ -2,14 +2,14 @@
 %global tarname empy
 
 Name:           python-empy
-Version:        3.3
-Release:        11%{?dist}
+Version:        3.3.1
+Release:        1%{?dist}
 Summary:        A powerful and robust template system for Python
 
 Group:          Development/Languages
 License:        LGPLv2+
 URL:            http://www.alcyone.com/software/empy/
-Source:         http://www.alcyone.com/software/%{tarname}/%{tarname}-latest.tar.gz
+Source:         http://www.alcyone.com/software/%{tarname}/%{tarname}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -45,6 +45,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Jan 24 2014 Orion Poplawski <orion@cora.nwra.com> - 3.3.1-1
+- Update to 3.3.1
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.3-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
