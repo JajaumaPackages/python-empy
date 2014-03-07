@@ -2,7 +2,7 @@
 %global tarname empy
 
 Name:           python-empy
-Version:        3.3.1
+Version:        3.3.2
 Release:        1%{?dist}
 Summary:        A powerful and robust template system for Python
 
@@ -45,6 +45,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Mar 07 2014 Filipe Rosset <rosset.filipe@gmail.com> - 3.3.2-1
+- Update to 3.3.2
+
 * Fri Jan 24 2014 Orion Poplawski <orion@cora.nwra.com> - 3.3.1-1
 - Update to 3.3.1
 
