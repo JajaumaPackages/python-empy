@@ -1,11 +1,17 @@
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%if 0%{?fedora} > 12
+%global with_python3 1
+%else
+%{!?__python2: %global __python2 /usr/bin/python2}
+%{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
+%{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%endif
+
 %global tarname empy
 
 Name:           python-empy
 Version:        3.3.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A powerful and robust template system for Python
-
 Group:          Development/Languages
 License:        LGPLv2+
 URL:            http://www.alcyone.com/software/empy/
@@ -13,11 +19,25 @@ Source:         http://www.alcyone.com/software/%{tarname}/%{tarname}-%{version}
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
-BuildRequires:  python-setuptools, python-devel
+
+BuildRequires:  python2-devel python-setuptools
+%if 0%{?with_python3}
+BuildRequires:  python3-devel python-setuptools
+%endif # if with_python3
 
 %description
 EmPy is a system for embedding Python expressions and statements in template
 text; it takes an EmPy source file, processes it, and produces output. 
+
+%if 0%{?with_python3}
+%package -n python3-empy
+Summary:        A powerful and robust template system for Python
+Group:          Development/Languages
+
+%description -n python3-empy
+EmPy is a system for embedding Python expressions and statements in template
+text; it takes an EmPy source file, processes it, and produces output. 
+%endif # with_python3
 
 %prep
 %setup -q -n %{tarname}-%{version}
@@ -25,26 +45,55 @@ text; it takes an EmPy source file, processes it, and produces output.
 #fix shebang on rpmlint
 sed -i -e '1d' em.py
 
-%build
-%{__python} setup.py build
+%if 0%{?with_python3}
+rm -rf %{py3dir}
+cp -a . %{py3dir}
+find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
+%endif # with_python3
 
+find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
+
+
+%build
+CFLAGS="$RPM_OPT_FLAGS" %{__python2} setup.py build
+
+%if 0%{?with_python3}
+pushd %{py3dir}
+CFLAGS="$RPM_OPT_FLAGS" %{__python3} setup.py build
+popd
+%endif # with_python3
 
 %install
-rm -rf $RPM_BUILD_ROOT
-%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
- 
+%if 0%{?with_python3}
+pushd %{py3dir}
+%{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
+%endif # with_python3
+
+%{__python2} setup.py install --skip-build --root $RPM_BUILD_ROOT
+
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 
 %files
-%defattr(-,root,root,-)
 %doc COPYING README version.txt
-%{python_sitelib}/*
+%{python2_sitelib}/*
+
+%if 0%{?with_python3}
+%files -n python3-empy
+%doc COPYING README version.txt
+%{python3_sitelib}/*
+%endif # with_python3
 
 
 %changelog
+* Sat Mar 08 2014 Filipe Rosset <rosset.filipe@gmail.com> - 3.3.2-2
+- Fix packaging issues, spec cleanup
+- Now compatible with python2 and python3 rhbz #1073768 
+
 * Fri Mar 07 2014 Filipe Rosset <rosset.filipe@gmail.com> - 3.3.2-1
 - Update to 3.3.2
 
@@ -56,31 +105,3 @@ rm -rf $RPM_BUILD_ROOT
 
 * Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.3-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
-
-* Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.3-9
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
-
-* Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.3-8
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
-
-* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.3-7
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
-
-* Thu Jul 22 2010 David Malcolm <dmalcolm@redhat.com> - 3.3-6
-- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
-
-* Wed Mar 03 2010 Filipe Rosset <rosset.filipe@gmail.com> - 3.3-5
-- Fix compilation error
-
-* Mon Mar 01 2010 Filipe Rosset <rosset.filipe@gmail.com> - 3.3-4
-- Fix license
-
-* Sat Feb 27 2010 Filipe Rosset <rosset.filipe@gmail.com> - 3.3-3
-- Remove python-devel in BuildRequires
-- Fix shebang on rpmlint
-
-* Tue Feb 23 2010 Filipe Rosset <rosset.filipe@gmail.com> - 3.3-2
-- Add build information
-
-* Mon Jan 11 2010 Filipe Rosset <rosset.filipe@gmail.com> - 3.3-1
-- Initial RPM release
