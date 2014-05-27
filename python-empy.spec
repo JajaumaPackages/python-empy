@@ -10,7 +10,7 @@
 
 Name:           python-empy
 Version:        3.3.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A powerful and robust template system for Python
 Group:          Development/Languages
 License:        LGPLv2+
@@ -90,6 +90,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed May 28 2014 Kalev Lember <kalevlember@gmail.com> - 3.3.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Changes/Python_3.4
+
 * Sat Mar 08 2014 Filipe Rosset <rosset.filipe@gmail.com> - 3.3.2-2
 - Fix packaging issues, spec cleanup
 - Now compatible with python2 and python3 rhbz #1073768 
