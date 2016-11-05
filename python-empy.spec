@@ -10,14 +10,12 @@
 
 Name:           python-empy
 Version:        3.3.2
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        A powerful and robust template system for Python
 Group:          Development/Languages
 License:        LGPLv2+
 URL:            http://www.alcyone.com/software/empy/
 Source:         http://www.alcyone.com/software/%{tarname}/%{tarname}-%{version}.tar.gz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-
 BuildArch:      noarch
 
 BuildRequires:  python2-devel python-setuptools
@@ -64,18 +62,12 @@ popd
 %endif # with_python3
 
 %install
-rm -rf %{buildroot}
-
 %if 0%{?with_python3}
 pushd %{py3dir}
 %{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
 %endif # with_python3
 
 %{__python2} setup.py install --skip-build --root $RPM_BUILD_ROOT
-
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 
 %files
@@ -90,6 +82,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Nov 05 2016 Filipe Rosset <rosset.filipe@gmail.com> - 3.3.2-9
+- Spec clean up
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 3.3.2-8
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
