@@ -1,87 +1,61 @@
-%if 0%{?fedora} > 12
-%global with_python3 1
-%else
-%{!?__python2: %global __python2 /usr/bin/python2}
-%{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-%{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
-%endif
-
-%global tarname empy
+%global srcname empy
 
 Name:           python-empy
 Version:        3.3.2
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        A powerful and robust template system for Python
 Group:          Development/Languages
 License:        LGPLv2+
 URL:            http://www.alcyone.com/software/empy/
-Source:         http://www.alcyone.com/software/%{tarname}/%{tarname}-%{version}.tar.gz
+Source:         http://www.alcyone.com/software/%{srcname}/%{srcname}-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  python2-devel python-setuptools
-%if 0%{?with_python3}
-BuildRequires:  python3-devel python-setuptools
-%endif # if with_python3
+BuildRequires:  python2-devel python3-devel python-setuptools
 
 %description
 EmPy is a system for embedding Python expressions and statements in template
 text; it takes an EmPy source file, processes it, and produces output. 
 
-%if 0%{?with_python3}
-%package -n python3-empy
-Summary:        A powerful and robust template system for Python
-Group:          Development/Languages
+%package -n python2-%{srcname}
+Summary:        %{sum}
+%{?python_provide:%python_provide python2-%{srcname}}
 
-%description -n python3-empy
+%description -n python2-%{srcname}
 EmPy is a system for embedding Python expressions and statements in template
 text; it takes an EmPy source file, processes it, and produces output. 
-%endif # with_python3
+
+%package -n python3-%{srcname}
+Summary:        %{sum}
+%{?python_provide:%python_provide python3-%{srcname}}
+
+%description -n python3-%{srcname}
+EmPy is a system for embedding Python expressions and statements in template
+text; it takes an EmPy source file, processes it, and produces output. 
 
 %prep
-%setup -q -n %{tarname}-%{version}
-
-#fix shebang on rpmlint
-sed -i -e '1d' em.py
-
-%if 0%{?with_python3}
-rm -rf %{py3dir}
-cp -a . %{py3dir}
-find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
-%endif # with_python3
-
-find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
-
+%autosetup -n %{srcname}-%{version}
 
 %build
-CFLAGS="$RPM_OPT_FLAGS" %{__python2} setup.py build
-
-%if 0%{?with_python3}
-pushd %{py3dir}
-CFLAGS="$RPM_OPT_FLAGS" %{__python3} setup.py build
-popd
-%endif # with_python3
+%py2_build
+%py3_build
 
 %install
-%if 0%{?with_python3}
-pushd %{py3dir}
-%{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
-%endif # with_python3
+%py2_install
+%py3_install
 
-%{__python2} setup.py install --skip-build --root $RPM_BUILD_ROOT
-
-
-%files
-%doc COPYING README version.txt
+%files -n python2-%{srcname}
+%license COPYING
+%doc README version.txt
 %{python2_sitelib}/*
 
-%if 0%{?with_python3}
-%files -n python3-empy
-%doc COPYING README version.txt
+%files -n python3-%{srcname}
+%license COPYING
+%doc README version.txt
 %{python3_sitelib}/*
-%endif # with_python3
-
 
 %changelog
+* Sun Dec 04 2016 Filipe Rosset <rosset.filipe@gmail.com> - 3.3.2-10
+- rebuilt to fix rhbz #1388272 (use latest python packaging guidelines)
+
 * Sat Nov 05 2016 Filipe Rosset <rosset.filipe@gmail.com> - 3.3.2-9
 - Spec clean up
 
