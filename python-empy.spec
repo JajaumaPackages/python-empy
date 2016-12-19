@@ -2,7 +2,7 @@
 
 Name:           python-empy
 Version:        3.3.2
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        A powerful and robust template system for Python
 Group:          Development/Languages
 License:        LGPLv2+
@@ -53,6 +53,9 @@ text; it takes an EmPy source file, processes it, and produces output.
 %{python3_sitelib}/*
 
 %changelog
+* Mon Dec 19 2016 Miro Hrončok <mhroncok@redhat.com> - 3.3.2-11
+- Rebuild for Python 3.6
+
 * Sun Dec 04 2016 Filipe Rosset <rosset.filipe@gmail.com> - 3.3.2-10
 - rebuilt to fix rhbz #1388272 (use latest python packaging guidelines)
 
