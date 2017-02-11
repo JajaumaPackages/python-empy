@@ -2,7 +2,7 @@
 
 Name:           python-empy
 Version:        3.3.2
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        A powerful and robust template system for Python
 Group:          Development/Languages
 License:        LGPLv2+
@@ -53,6 +53,9 @@ text; it takes an EmPy source file, processes it, and produces output.
 %{python3_sitelib}/*
 
 %changelog
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 3.3.2-12
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Mon Dec 19 2016 Miro Hrončok <mhroncok@redhat.com> - 3.3.2-11
 - Rebuild for Python 3.6
 
