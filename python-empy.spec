@@ -1,15 +1,19 @@
 %global srcname empy
 
 Name:           python-empy
-Version:        3.3.2
-Release:        13%{?dist}
+Version:        3.3.3
+Release:        1%{?dist}
 Summary:        A powerful and robust template system for Python
 Group:          Development/Languages
 License:        LGPLv2+
 URL:            http://www.alcyone.com/software/empy/
 Source:         http://www.alcyone.com/software/%{srcname}/%{srcname}-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python2-devel python3-devel python-setuptools
+BuildRequires:  python2-devel
+%if 0%{?fedora} || 0%{?rhel} > 7
+BuildRequires:  python3-devel
+%endif
+BuildRequires:  python-setuptools
 
 %description
 EmPy is a system for embedding Python expressions and statements in template
@@ -23,6 +27,7 @@ Summary:        %{sum}
 EmPy is a system for embedding Python expressions and statements in template
 text; it takes an EmPy source file, processes it, and produces output. 
 
+%if 0%{?fedora} || 0%{?rhel} > 7
 %package -n python3-%{srcname}
 Summary:        %{sum}
 %{?python_provide:%python_provide python3-%{srcname}}
@@ -30,29 +35,40 @@ Summary:        %{sum}
 %description -n python3-%{srcname}
 EmPy is a system for embedding Python expressions and statements in template
 text; it takes an EmPy source file, processes it, and produces output. 
+%endif
 
 %prep
 %autosetup -n %{srcname}-%{version}
 
 %build
 %py2_build
+%if 0%{?fedora} || 0%{?rhel} > 7
 %py3_build
+%endif
 
 %install
 %py2_install
+%if 0%{?fedora} || 0%{?rhel} > 7
 %py3_install
+%endif
 
 %files -n python2-%{srcname}
 %license COPYING
 %doc README version.txt
 %{python2_sitelib}/*
 
+%if 0%{?fedora} || 0%{?rhel} > 7
 %files -n python3-%{srcname}
 %license COPYING
 %doc README version.txt
 %{python3_sitelib}/*
+%endif
 
 %changelog
+* Sun Sep 03 2017 Jajauma's Packages <jajauma@yandex.ru> - 
+- Update to latest upstream release
+- Skip python3 on RHEL7
+
 * Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 3.3.2-13
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
