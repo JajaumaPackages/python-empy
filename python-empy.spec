@@ -73,7 +73,7 @@ text; it takes an EmPy source file, processes it, and produces output.
 %endif
 
 %changelog
-* Sun Sep 03 2017 Jajauma's Packages <jajauma@yandex.ru> - 
+* Sun Sep 03 2017 Jajauma's Packages <jajauma@yandex.ru> - 3.3.3-1
 - Update to latest upstream release
 - Skip python3 on RHEL7
 
