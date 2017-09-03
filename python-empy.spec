@@ -41,21 +41,29 @@ text; it takes an EmPy source file, processes it, and produces output.
 %autosetup -n %{srcname}-%{version}
 
 %build
-%py2_build
 %if 0%{?fedora} || 0%{?rhel} > 7
+%py2_build
 %py3_build
+%else
+%py_build
 %endif
 
 %install
-%py2_install
 %if 0%{?fedora} || 0%{?rhel} > 7
+%py2_install
 %py3_install
+%else
+%py_install
 %endif
 
 %files -n python2-%{srcname}
 %license COPYING
 %doc README version.txt
+%if 0%{?fedora} || 0%{?rhel} > 7
 %{python2_sitelib}/*
+%else
+%{python_sitelib}/*
+%endif
 
 %if 0%{?fedora} || 0%{?rhel} > 7
 %files -n python3-%{srcname}
